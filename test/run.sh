@@ -30,4 +30,6 @@ sh ./kill_mo.sh
 check_retcode "failed to kill"
 
 echo_proxy "start bvt"
+st=`date +%s`
+mv store{,.${st}}
 sh ./start_mo.sh && sleep 5 && ./run_bvt.sh
