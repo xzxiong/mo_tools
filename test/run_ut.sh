@@ -20,9 +20,13 @@ check_retcode_without_exit() {
         fi
 }
 
+itself=`readlink -f $0`
+basedir=`dirname $itself`
+cd $basedir
 
 
 echo_proxy "run ut"
-nohup make ut > ut.log &
-#check_retcode "failed to ut"
 
+st=`date +%s`
+if [ -f ut.log ]; then mv ut.log{,.${st}}; fi
+nohup make ut > ut.log 2>&1 &

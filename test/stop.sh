@@ -11,7 +11,7 @@ kill_mo() {
 }
 
 
-ps -eo 'pid, ppid, user, command'  | grep -E "mo-server|mo-service|matrixone_cmd_db_server|go_build_mo_service" | while read pid ppid user cmd _other;
+ps -eo 'pid,ppid,user,command'  | grep -E "mo-server|mo-service|matrixone_cmd_db_server|go_build_mo_service" | while read pid ppid user cmd _other;
 do
     [ `basename $cmd` == "go_build_github_com_matrixorigin_matrixone_cmd_db_server" ] && kill_mo $pid;
     [ `basename $cmd` == "go_build_mo_service" ] && kill_mo $pid;
