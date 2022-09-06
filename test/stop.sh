@@ -18,6 +18,6 @@ do
     [ `basename $cmd` == "mo-service" ] && kill_mo $pid
     [ `basename $cmd` == "mo-server" ] && kill_mo $pid
 done;
-#kill -SIGTERM $pid
 
-ps -ef | grep -E "mo-server|matrixone_cmd_db_server"
+sleep 0.5
+./p.sh
