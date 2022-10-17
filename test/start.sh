@@ -1,7 +1,16 @@
 #!/bin/bash
 
+get_itself() {
+    if [ "`uname -a | grep -w Darwin | wc -l | awk '{print $1}'`" == "1" ] ; then
+        greadlink -f $0
+    else
+        readlink -f $0
+    fi
+}
+
+
 default_branch=dist
-itself=`readlink -f $0`
+itself=`get_itself`
 basedir=`dirname $itself`
 cd $basedir
 
@@ -20,7 +29,13 @@ function shrink_file()
         max_file_cnt=10
     fi
     ## main
-    local file_size=`du -b $file | awk '{print $1}'`
+    local file_size=0
+    if [ "`uname -a | grep -w Darwin | wc -l | awk '{print $1}'`" == "1" ] ; then
+        file_size=`du -k $file | awk '{print $1}'`
+        let file_size=$file_size*1024
+    else
+        file_size=`du -b $file | awk '{print $1}'`
+    fi
     if [ $? -ne 0  ];then
         return 2
     fi
