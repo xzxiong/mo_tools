@@ -11,13 +11,20 @@ echo_proxy()
     echo "[`date '+%F %T'`] $@"
 }
 
+echo_proxy "exec stop"
+./stop.sh
+
 echo_proxy "start compile"
-make build
+make clean; make build
+
+echo_proxy "stop running mo-servcie"
+st=`date +%s`
+mv store{,.${st}}
+mv mo-data{,.${st}}
+rm -rf node-{1,2,3}-data
 
 echo_proxy "start running"
-rm -rf store/
-mkdir store
-./mo-server ./system_vars_config.toml > store/mo.log
+./start.sh
 
 echo_proxy "Done."
 
