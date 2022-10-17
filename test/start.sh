@@ -61,28 +61,37 @@ branch=$1
 if [ -z "$branch" ]; then branch=$default_branch; fi
 
 ulimit -n 102400
-if [ "$branch" == "server" ]; then
-    nohup ./mo-server ./system_vars_config.toml > ./mo-server.log 2>mo-server.err &
-elif [ "$branch" == "service" ]; then
-    ./mo-service -cfg ./etc/cn-standalone-test.toml &>mo-service.log &
-elif [ "$branch" == "s3" -o "$branch" == "S3" ]; then
-    ./mo-service -cfg ./cn-s3-test.toml &>mo-service.log &
-elif [ "$branch" == "log" -o "$branch" == "logservice" ]; then
-    [ ! -d store ] && mkdir store
-    touch store/thisisalocalfileservicedir
-    ./mo-service -cfg ./log-test.toml &> log-service.log &
-elif [ "$branch" == "dn" -o "$branch" == "DN" ]; then
-    [ ! -d store ] && mkdir store
-    touch store/thisisalocalfileservicedir
-    ./mo-service -cfg ./dn-test.toml &> dn-service.log &
-elif [ "$branch" == "debug" ]; then
-    [ ! -d store ] && mkdir store
-    touch store/thisisalocalfileservicedir
-    ./mo-service -cfg ./cn-debug.toml &> mo-service.log &
-elif [ "$branch" == "dist" ]; then
-    ./mo-service -launch ./etc/launch-tae-logservice/launch.toml &>mo-service.log &
-else
-    echo "[ERROR] unknown [branch]: $branch"
-    usage
-    exit 1
-fi
+case "$branch" in
+    server)
+        nohup ./mo-server ./system_vars_config.toml > ./mo-server.log 2>mo-server.err &
+        ;;
+    service)
+        ./mo-service -cfg ./etc/cn-standalone-test.toml &>mo-service.log &
+        ;;
+    s3|S3)
+        ./mo-service -cfg ./cn-s3-test.toml &>mo-service.log &
+        ;;
+    log|logservice)
+        [ ! -d store ] && mkdir store
+        touch store/thisisalocalfileservicedir
+        ./mo-service -cfg ./log-test.toml &> log-service.log &
+        ;;
+    dn|DN)
+        [ ! -d store ] && mkdir store
+        touch store/thisisalocalfileservicedir
+        ./mo-service -cfg ./dn-test.toml &> dn-service.log &
+        ;;
+    debug)
+        [ ! -d store ] && mkdir store
+        touch store/thisisalocalfileservicedir
+        ./mo-service -cfg ./cn-debug.toml &> mo-service.log &
+        ;;
+    dist)
+        ./mo-service -launch ./etc/launch-tae-logservice/launch.toml &>mo-service.log &
+        ;;
+    *)
+        echo "[ERROR] unknown [branch]: $branch"
+        usage
+        exit 1
+        ;;
+esac
