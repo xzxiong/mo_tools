@@ -55,3 +55,8 @@ mysql> show tables;
 +-----------------+
 6 rows in set (0.01 sec)
 ```
+- md5sum
+```
+4f8c951dfaaf8863f364f3857170a9b7  mo-ctl.linux
+70a933c6b6e8142f4a1f5ba61eb9cfb4  mo-ctl.mac
+```
