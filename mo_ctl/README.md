@@ -59,5 +59,5 @@ mysql> show tables;
 ```
 4f8c951dfaaf8863f364f3857170a9b7  mo-ctl.linux      // Linux
 ca49d1ccf3c7ef21efe49fda05c11b34  mo-ctl.mac.intel  // macOS Intel
-70a933c6b6e8142f4a1f5ba61eb9cfb4  mo-ctl.mac.m1     // macOS Apple Silicon
+d87e7ca2db7e0649392aec2b8fc1eecc  mo-ctl.mac.m1     // macOS Apple Silicon
 ```
