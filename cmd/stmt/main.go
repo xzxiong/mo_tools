@@ -26,7 +26,7 @@ func main() {
 	fmt.Printf("timestamp: %v\n", stmtTS)
 	fmt.Printf("Result:\n")
 	fmt.Printf("select * from system.statement_info where statement_id = '%s'"+
-		" and request_at between UNIX_TIMESTAMP(%d) and UNIX_TIMESTAMP(%d)",
+		" and request_at between FROM_UNIXTIME(%d) and FROM_UNIXTIME(%d)",
 		stmtId,
 		stmtTS.Unix(), stmtTS.Unix()+1,
 	)
