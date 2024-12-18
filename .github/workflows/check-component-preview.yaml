@@ -1,0 +1,53 @@
+name: check component preview
+on:
+  workflow_dispatch:
+    #inputs:
+    #  env:
+    #    description: 'run which env'
+    #    required: true
+    #    type: choice
+    #    options:
+    #    - new-dev
+    #    - qa
+    #    - prod
+  pull_request:
+    branches:
+    - 'main'
+    paths:
+      - '**'
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      qaPreview: ${{ steps.check.outputs.qaPreview }}
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install @actions/github
+
+      - name: get changed files
+        id: check
+        uses: actions/github-script@v7
+        env:
+          QA_ENABLE: ${{ secrets.ENV_QA_ENABLE }}
+        with:
+          script: |
+            const { QA_ENABLE } = process.env
+
+            const qaEnable = QA_ENABLE == "true" || QA_ENABLE == "TRUE" || QA_ENABLE == "1"
+
+            hasDevPreview = true
+            hasProdPreview = true
+            hasQaPreview = true
+            hasRelevantChanges = true
+            qaPreview = qaEnable && hasQaPreview || hasRelevantChanges
+            core.setOutput('qaPreview', qaEnable && hasQaPreview || hasRelevantChanges);
+
+            console.log('pull request has dev change:', hasDevPreview);
+            console.log('pull request has qa change:', hasQaPreview);
+            console.log('pull request has prod change:', hasProdPreview);
+            console.log('pull request has other changes:', hasRelevantChanges);
+            console.log('pull request has qa enable:', qaEnable);
+            console.log('pull request has qaPreview:', qaPreview);
