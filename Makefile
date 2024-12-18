@@ -27,20 +27,21 @@ GOLDFLAGS=-ldflags="-X '$(GO_MODULE)/pkg/version.GoVersion=$(GO_VERSION)' -X '$(
 ##################
 BIN_STMT=./bin/stmt
 
-# build mo-service binary for debugging with go's race detector enabled
+build: stmt
+
+.PHONY: stmt
+stmt:
+	go build $(RACE_OPT) $(GOLDFLAGS) $(DEBUG_OPT) -o $(BIN_STMT) ./cmd/stmt
+
+# build binary for debugging with go's race detector enabled
 # produced executable is 10x slower and consumes much more memory
+# PS: override should be the last declear (override directive is run and active)
 .PHONY: debug
 debug: override BUILD_NAME := debug-binary
 debug: override RACE_OPT := -race
 debug: override DEBUG_OPT := -gcflags=all="-N -l"
 debug: override CGO_DEBUG_OPT := debug
 debug: build
-
-build: stmt
-
-.PHONY: stmt
-stmt:
-	go build  $(RACE_OPT) $(GOLDFLAGS) $(DEBUG_OPT) -o $(BIN_STMT) ./cmd/stmt
 
 ## clean
 ##################
